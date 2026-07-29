@@ -1,0 +1,52 @@
+import pandas as pd
+# Load dataset into a DataFrame
+df = pd.read_csv('/content/sample_data/california_housing_train.csv')
+# Display first and last few rows
+print("First 5 rows:\n", df.head())
+print("Last 5 rows:\n", df.tail())
+# Check data types and general info
+df.info()
+# Summary statistics
+print("Summary statistics:\n", df.describe())
+# Handle missing values
+df.fillna(df.mean(numeric_only=True), inplace=True)
+# Create a new column
+# The original code assumed 'existing_column' exists, but it might not in the new dataset.
+# I'll use a numerical column from the sample data, for example 'median_house_value'.
+df['new_column'] = df['median_house_value'] * 2
+# Create a Series and perform operations
+series = df['median_house_value']
+print("Series addition:", series + 10)
+# Filter rows based on conditions
+# Similarly, 'existing_column' and 'another_column' might not exist.
+# Using 'median_income' and 'housing_median_age' as examples from the sample data.
+filtered_df = df[(df['median_income'] > 5) & (df['housing_median_age'] < 30)]
+print("Filtered DataFrame:\n", filtered_df)
+# Grouping and aggregation
+# Using 'ocean_proximity' as a categorical column and 'median_house_value' as numeric.
+# If 'ocean_proximity' doesn't exist, this line might still cause an error in a real dataset.
+# The sample data `california_housing_train.csv` does not have 'category_column' or 'numeric_column'.
+# I'll comment out the original line and add an example using available columns if suitable.
+# For now, I will use 'housing_median_age' for grouping and 'median_house_value' for aggregation.
+grouped = df.groupby('housing_median_age')['median_house_value'].mean()
+print("Grouped mean:\n", grouped)
+# Sorting
+df_sorted = df.sort_values(by='median_house_value', ascending=False)
+print("Sorted DataFrame:\n", df_sorted)
+# Boolean masking
+masked_df = df[df['median_house_value'] > df['median_house_value'].median()]
+
+print("Masked DataFrame:\n", masked_df)
+# Remove duplicates and drop missing values
+df.drop_duplicates(inplace=True)
+df.dropna(inplace=True)
+
+# Create a new DataFrame with selected columns
+# 'column1' and 'column2' are placeholders. Using actual columns from the sample data.
+subset_df = df[['longitude', 'latitude', 'median_house_value']]
+# Save the new DataFrame to a CSV file
+subset_df.to_csv('filtered_data.csv', index=False)
+# Compute summary statistics
+print("Total sum:", df['median_house_value'].sum())
+print("Mean:", df['median_house_value'].mean())
+print("Standard Deviation:", df['median_house_value'].std())

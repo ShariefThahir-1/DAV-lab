@@ -1,0 +1,57 @@
+import pandas as pd
+
+# Read data from local files (these files were not found, causing errors)
+# Please upload 'Google_data (2b.c1).csv' and 'data (2c2).xlsx' or update their paths.
+try:
+    text_df = pd.read_csv('Google_data (2b.c1).csv')
+except FileNotFoundError:
+    print("Warning: 'Google_data (2b.c1).csv' not found. Creating an empty DataFrame.")
+    text_df = pd.DataFrame()
+
+try:
+    excel_df = pd.read_excel('data (2c2).xlsx', sheet_name='Sheet1')
+except FileNotFoundError:
+    print("Warning: 'data (2c2).xlsx' not found. Creating an empty DataFrame.")
+    excel_df = pd.DataFrame()
+
+# Read data from a web URL
+web_df = pd.read_csv('https://raw.githubusercontent.com/cs109/2014_data/master/countries.csv') # Fixed: The original error was caused by an uncommented line:
+# Replace with actual URL
+
+# Display data
+print("Text DataFrame head:\n", text_df.head())
+print("\nExcel DataFrame head:\n", excel_df.head())
+print("\nWeb DataFrame head:\n", web_df.head())
+
+# Handle missing values
+# Only apply if DataFrame is not empty
+if not text_df.empty:
+    text_df.fillna(method='ffill', inplace=True)
+    print("\nText DataFrame after ffill:\n", text_df.head())
+else:
+    print("\nText DataFrame is empty, skipping fillna.")
+
+if not excel_df.empty:
+    excel_df.fillna(method='bfill', inplace=True)
+    print("\nExcel DataFrame after bfill:\n", excel_df.head())
+else:
+    print("\nExcel DataFrame is empty, skipping fillna.")
+
+if not web_df.empty:
+    web_df.dropna(inplace=True)
+    print("\nWeb DataFrame after dropna:\n", web_df.head())
+else:
+    print("\nWeb DataFrame is empty, skipping dropna.")
+
+# Save processed data
+if not text_df.empty:
+    text_df.to_csv('processed_text.csv', index=False)
+    print("\n'processed_text.csv' saved.")
+else:
+    print("\nSkipping saving 'processed_text.csv' as text_df is empty.")
+
+if not excel_df.empty:
+    excel_df.to_excel('processed_excel.xlsx', index=False)
+    print("\n'processed_excel.xlsx' saved.")
+else:
+    print("\nSkipping saving 'processed_excel.xlsx' as excel_df is empty.")
